@@ -132,7 +132,7 @@ class Algo(object):
         # get weights
         if n_jobs == 1:
             try:
-                B = self.weights(X, log_progress=log_progress)
+                B = self.weights(X)
             except TypeError:  # weights are missing log_progress parameter
                 B = self.weights(X)
         else:

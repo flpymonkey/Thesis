@@ -106,7 +106,7 @@ class AlgoResult(PickleMixin):
         # add risk-free asset
         self.r -= (self.B.sum(axis=1) - 1) * self.rf_rate / self.freq()
 
-        # add fees
+        # # TODO ensure that fee calculations are being done correctly here!!!!!!!!!!! add fees
         self.fees = self._to_rebalance().abs() * self.fee
         self.asset_r -= self.fees
         self.r -= self.fees.sum(axis=1)

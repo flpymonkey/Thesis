@@ -13,6 +13,7 @@ pandas>=1.1.5
 stockstats
 yfinance
 cvxopt
+statsmodels
 #pyfolio
 
 # plot

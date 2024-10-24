@@ -11,7 +11,7 @@ ipykernel
 numpy
 pandas>=1.1.5
 stockstats
-yfinance
+yfinance==0.2.44
 cvxopt
 statsmodels
 #pyfolio
@@ -33,5 +33,6 @@ wheel>=0.33.6
 
 # install FinRL
 finrl @ git+https://github.com/flpymonkey/FinRL-Fork.git
+#finrl @ git+https://github.com/AI4Finance-Foundation/FinRL.git
 quantstats
 torch_geometric

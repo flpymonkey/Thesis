@@ -26,7 +26,7 @@ class OLMAR(Algo):
         :param ma_type: Type of moving average used, either SMA or EMA
         """
 
-        super().__init__(min_history=1)
+        super().__init__(min_history=0)
 
         # input check
         if window < 2:
@@ -56,18 +56,15 @@ class OLMAR(Algo):
         else:
             x_pred = self.predict(x, history.iloc[-self.window :])
         b = self.update(last_b, x_pred, self.eps)
+        print("Weights!!!!")
+        print(b)
         return b
 
 
     def predict(self, x, hist):
         """Predict next price relative."""
-        if self.ma_type == "SMA":
-            return hist.mean() / hist.iloc[-1, :]
-        else:
-            real_x = hist.iloc[-1, :] / hist.iloc[-2, :]
-            x_pred = self.alpha + (1 - self.alpha) * np.divide(self.x_pred, real_x)
-            self.x_pred = x_pred
-            return x_pred
+        return hist.mean() / hist.iloc[-1, :]
+        
 
 
     def update(self, b, x_pred, eps):
@@ -84,9 +81,10 @@ class OLMAR(Algo):
         # update portfolio
         b = b + lam * (excess_return)
 
+        b = tools.simplex_proj(b)
 
         # project it onto simplex
-        return tools.simplex_proj(b)
+        return b
 
 
 

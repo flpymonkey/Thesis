@@ -76,6 +76,8 @@ class Algo(object):
         # run algo
         self.init_step(X)
         for t, (_, x) in enumerate(X.iterrows()):
+            print("Price2!!!!")
+            print(x)
             # save weights
             B.iloc[t] = last_b
 
@@ -126,12 +128,20 @@ class Algo(object):
         else:
             P = S
 
+        print("about the convert!!!!!!!!!!!")
+        print(P)
+        
         # convert prices to proper format
         X = self._convert_prices(P, self.PRICE_TYPE, self.REPLACE_MISSING)
+
+        print("converted!!!!!!!!!!!")
+        print(X)
 
         # get weights
         if n_jobs == 1:
             try:
+                print("about the call weights!!!!!!!!!!!")
+                print(X)
                 B = self.weights(X)
             except TypeError:  # weights are missing log_progress parameter
                 B = self.weights(X)

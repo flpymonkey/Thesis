@@ -32,7 +32,6 @@ setuptools>=41.4.0
 wheel>=0.33.6
 
 # install FinRL
-finrl @ git+https://github.com/flpymonkey/FinRL-Fork.git
-#finrl @ git+https://github.com/AI4Finance-Foundation/FinRL.git
+finrl @ git+https://github.com/flpymonkey/FinRL_Online_Portfolio_Benchmarks.git
 quantstats
 torch_geometric

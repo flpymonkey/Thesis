@@ -1,0 +1,558 @@
+\subsection{PPO Agent Results - DJI Portfolio}
+
+For this experiment we are using the Stable Baselines PPO model as discussed previously with the \texttt{PortfolioOptimizationEnv} environment. 
+
+We trained the model using a $50$ step policy update rate, an entropy coefficient of $0$, a learning rate of $0.00025$, and a clip range of $0.2$. The training period was from April 1st, 2009 to December 31st, 2021, which is 2,960 trading days. We trained the model for 80 training episodes, which is roughly 236,800 time steps in the Gym environment. 
+
+We excluded the DOW stock ticker from training and testing due to data inconsistencies, using only the remaining 29 DJI tickers.
+
+The results in the test period compared to the base Dow Jones Index are shown in Figure \ref{fig:PPO-DJI}. The final Sharpe Ratio, max draw-down, and returns during the test period are compared to the online optimization benchmark algorithms below.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{PPO_BAH_DJI.png}
+    \caption{In the test period (from February 8th, 2022 to September 30th, 2024), the PPO agent tracks the DJI and BAH net worth closely.}
+    \label{fig:PPO-DJI}
+\end{figure}
+
+
+
+\newpage
+\subsection{Comparing PPO and Online Portfolio Results - DJI Portfolio }
+
+We can now look at how all of these algorithms compare to the PPO reinforcement learning algorithm trained for 29 DJI stocks (excluding DOW). 
+
+First we can look at the model training convergence. We show the model converging as the value loss is minimized in \ref{fig:overfitting-value-loss}. This low value loss also shows signs of over-fitting as the model seems to have almost memorized the expected value at each time step.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{DJI_2021_Reward.png}
+    \caption{The average episodic reward during training steps for the PPO model trained over DJI data from April 1st, 2009 to December 31st, 2021. We can see the model is likely converging around an episodic reward. this corresponds to a decrease in the magnitude of entropy loss, indicating the model is reducing exploration and converging around the best expected reward action sequence it has found.}
+    \label{fig:ppo_reward_train}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{DJI_2021_Value_Loss.png}
+    \caption{here we show the value loss over the same training period as the previous figure \ref{fig:ppo_reward_train}. The model value loss has decreased substantially. This near zero value loss indicates the model is potentially over-fitting on the training dataset.}
+    \label{fig:overfitting-value-loss}
+\end{figure}
+
+Looking at the in-sample training date range we can see that the PPO model under-performs the baseline BAH benchmark as shown in Figure \ref{fig:PPO-training}. 
+The PPO model performs slightly below the benchmarks during the testing period in \ref{fig:model-OOS-2022}. The model has a smaller maximum drawdown than the other major benchmarks (except BCRP, which uses hindsight) as shown in table \ref{tab:ppo-drawdown}. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{PPO_IS_COMPARE.png}
+    \caption{The PPO agent performs below the benchmarks in the training period.}
+    \label{fig:PPO-training}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29} & \textbf{Final Net Worth - IS} \\
+\hline
+BAH & \$9,438,973.0 \\
+BCRP OPT & \$43,922,244.0 \\
+BNN & \$8,914,580.0 \\
+CRP & \$8,331,418.0 \\
+OLMAR & \$5,228,158.5 \\
+PPO & \$7,006,000.5 \\
+RMR & \$10,384,413.0 \\
+\hline
+\end{tabular}
+\caption{PPO trained for 29 DJI stocks from April 1st, 2009 to December 31st, 2021. This shows final net worth for each algorithm during the training period.}
+\label{tab:results1}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29} & \textbf{Sharpe Ratio - IS} \\
+\hline
+BAH OPT & 0.994 \\
+BCRP OPT & 1.138 \\
+BNN & 0.634 \\
+CRP OPT & 0.961 \\
+OLMAR & 0.499 \\
+PPO Opt & 0.940 \\
+RMR & 0.660 \\
+\hline
+\end{tabular}
+\caption{PPO trained for 29 DJI stocks from April 1st, 2009 to December 31st, 2021. This shows Sharpe Ratio during the training period.}
+\label{tab:results2}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29} & \textbf{Max Drawdown - IS} \\
+\hline
+BAH Opt & -0.336 \\
+BCRP Opt & -0.438 \\
+BNN Opt & -0.395 \\
+CRP Opt & -0.331 \\
+OLMAR Opt & -0.695 \\
+PPO Opt & -0.299 \\
+RMR Opt & -0.467 \\
+\hline
+\end{tabular}
+\caption{PPO trained for 29 DJI stocks from April 1st, 2009 to December 31st, 2021. This shows maximum drawdown during the training period.}
+\label{tab:ppo-drawdown}
+\end{minipage}
+\end{table}
+
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{PPO_OOS_2022.png}
+    \caption{The model performs slightly below the other major benchmarks from February 8th, 2022 to September 30th, 2024.}
+    \label{fig:model-OOS-2022}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29} & \textbf{Final Net Worth - OOS 2022} \\
+\hline
+BAH & \$1,225,164.88 \\
+BCRP OPT & \$1,582,828.88 \\
+BNN & \$846,236.31 \\
+CRP & \$1,205,314.75 \\
+OLMAR & \$687,795.81 \\
+PPO & \$1,168,414.75 \\
+RMR & \$854,506.94 \\
+\hline
+\end{tabular}
+\caption{Final net worth for each algorithm during the test period for February 8th, 2022 to September 30th, 2024.}
+\label{tab:results1}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29} & \textbf{Sharpe Ratio - OOS 2022} \\
+\hline
+BAH OPT & 0.466 \\
+BCRP OPT & 0.872 \\
+BNN & -0.226 \\
+CRP OPT & 0.412 \\
+OLMAR & -0.301 \\
+PPO Opt & 0.350 \\
+RMR & -0.212 \\
+\hline
+\end{tabular}
+\caption{Sharpe ratio during the test period for February 8th, 2022 to September 30th, 2024.}
+\label{tab:results2}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29} & \textbf{Max Drawdown - OOS 2022} \\
+\hline
+BAH Opt & -0.199 \\
+BCRP Opt & -0.164 \\
+BNN Opt & -0.371 \\
+CRP Opt & -0.200 \\
+OLMAR Opt & -0.407 \\
+PPO Opt & -0.189 \\
+RMR Opt & -0.364 \\
+\hline
+\end{tabular}
+\caption{Max Drawdown during the test period for February 8th, 2022 to September 30th, 2024.}
+\label{tab:results3}
+\end{minipage}
+\end{table}
+
+\clearpage
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{PPO_OOS_2021.png}
+    \caption{In a separate example, the model was trained from 2009 to the end of 2020. The PPO agent performs well during the testing period (2021 - 2023) compared to benchmarks.}
+    \label{fig:model2020}
+\end{figure}
+
+% Clear the page to ensure all tables and images are processed \clearpage
+\clearpage
+\subsubsection{Including Technical Indicators in the Observation Space}
+
+Next we can look how the model performs with the addition of the technical indicators (MACD \eqref{eq:MACD:1}, RSI \eqref{eq:RSI:1}, CCI \eqref{eq:CCI:1}, and ADX \eqref{eq:ADX:1}) mentioned in the stock trading environment. The goal would be that these technical indicators would give the agent additional signals that would not be captured in the online portfolio baseline algorithms. This model was trained over the same time period with the same hyperparameters as the example in Figure \ref{fig:PPO-training}, with only the addition of the four technical indicators to the state space. The model with the additional technical indicators does perform slightly better in-sample.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{PPO_OOS_Features_2023.png}
+    \caption{This model is trained with additional technical indicators over the same time-period and hyper-parameters as the first PPO model in Figure \ref{fig:PPO-training}. This runs that model over the test date range from February 8th, 2023 to September 30th, 2024. The model without the additional technical indicators performs slightly better, as shown in the tables below.}
+    \label{fig:features-oos}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29 - With Indicators} & \textbf{Final Net Worth - OOS 2023} \\
+\hline
+BAH & \$1,240,769.63 \\
+BCRP & \$1,605,121.25 \\
+CRP & \$1,218,665.75 \\
+OLMAR & \$1,040,184.38 \\
+PPO & \$1,218,400.00 \\
+RMR & \$762,969.81 \\
+\hline
+\end{tabular}
+\caption{Final net worth for each algorithm during the test period from February 8th, 2023 to September 30th, 2024.}
+\label{tab:results1}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29 - With Indicators} & \textbf{Sharpe Ratio - OOS 2023} \\
+\hline
+BAH & 1.083 \\
+BCRP & 0.998 \\
+CRP & 0.964 \\
+OLMAR & 0.172 \\
+PPO & 0.946 \\
+RMR & -0.334 \\
+\hline
+\end{tabular}
+\caption{Sharpe ratio during the test period from February 8th, 2023 to September 30th, 2024.}
+\label{tab:results2}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29 - With Indicators} & \textbf{Max Drawdown - OOS 2023} \\
+\hline
+BAH & -0.085 \\
+BCRP & -0.311 \\
+CRP & -0.087 \\
+OLMAR & -0.296 \\
+PPO & -0.086 \\
+RMR & -0.442 \\
+\hline
+\end{tabular}
+\caption{Max Drawdown during the test period from February 8th, 2023 to September 30th, 2024.}
+\label{tab:results3}
+\end{minipage}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29 - No Technical Indicators} & \textbf{Final Net Worth - OOS 2023} \\
+\hline
+BAH & \$1,240,769.50 \\
+BCRP OPT & \$1,605,120.63 \\
+BNN & \$839,409.31 \\
+CRP & \$1,218,664.63 \\
+OLMAR & \$1,040,178.63 \\
+PPO & \$1,167,450.63 \\
+RMR & \$864,715.94 \\
+\hline
+\end{tabular}
+\caption{Final net worth for each algorithm during the test period from February 8th, 2023 to September 30th, 2024.}
+\label{tab:results4}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29 - No Technical Indicators} & \textbf{Sharpe Ratio - OOS 2023} \\
+\hline
+BAH OPT & 1.083 \\
+BCRP OPT & 0.998 \\
+BNN & -0.257 \\
+CRP OPT & 0.964 \\
+OLMAR & 0.172 \\
+PPO Opt & 0.750 \\
+RMR & -0.200 \\
+\hline
+\end{tabular}
+\caption{Sharpe ratio during the test period from February 8th, 2023 to September 30th, 2024.}
+\label{tab:results5}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29 - No Technical Indicators} & \textbf{Max Drawdown - OOS 2023} \\
+\hline
+BAH Opt & -0.085 \\
+BCRP Opt & -0.311 \\
+BNN Opt & -0.395 \\
+CRP Opt & -0.087 \\
+OLMAR Opt & -0.296 \\
+PPO Opt & -0.084 \\
+RMR Opt & -0.341 \\
+\hline
+\end{tabular}
+\caption{Max Drawdown during the test period from February 8th, 2023 to September 30th, 2024.}
+\label{tab:results6}
+\end{minipage}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{PPO_IS_Features.png}
+    \caption{This shows the DJI 29 trained model with features in-sample performing slightly better than the same model without the additional features as shown in Figure \ref{fig:PPO-training}.}
+    \label{fig:features-is}
+\end{figure}
+
+
+\begin{table}[ht]
+\centering
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29 - With Indicators} & \textbf{Final Net Worth - IS} \\
+\hline
+BAH & \$9,438,967.00 \\
+BCRP & \$43,925,840.00 \\
+CRP & \$8,331,423.50 \\
+OLMAR & \$5,228,224.50 \\
+PPO & \$8,737,316.00 \\
+RMR & \$4,407,913.00 \\
+\hline
+\end{tabular}
+\caption{Final net worth for each algorithm during the training period.}
+\label{tab:results1}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29 - With Indicators} & \textbf{Sharpe Ratio - IS} \\
+\hline
+BAH & 0.994 \\
+BCRP & 1.138 \\
+CRP & 0.961 \\
+OLMAR & 0.499 \\
+PPO Opt & 0.970 \\
+RMR & 0.460 \\
+\hline
+\end{tabular}
+\caption{Sharpe ratio during the training period.}
+\label{tab:results2}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - DJI 29 - With Indicators} & \textbf{Max Drawdown - IS} \\
+\hline
+BAH & -0.336 \\
+BCRP & -0.438 \\
+CRP & -0.331 \\
+OLMAR & -0.695 \\
+PPO & -0.336 \\
+RMR & -0.710 \\
+\hline
+\end{tabular}
+\caption{Max Drawdown during the training period.}
+\label{tab:results3}
+\end{minipage}
+\end{table}
+
+\clearpage
+\subsection{Comparing PPO and Online Portfolio Results - Small Action-Space Portfolio}
+
+As mentioned previously, training the RL model on a continuous action space of dimension 29 for this stock data is a computationally intensive task. Here we limited the action space to only four stocks in our portfolio (AXP, AMGN, AAPL, BA) to exemplify the RL model training process and examine how the model performs with more training. 
+
+We trained the model using a 50 step policy update rate, an entropy coefficient of 0, a learning
+rate of 0.00025, and a clip range of 0.2. The training period was from April 1st, 2009 to December
+31st, 2021, which is 2,960 trading days. We trained the model for 500 training episodes, which is
+roughly 1,480,000 time steps in the Gym environment.
+
+This model shows similar signs off convergence and over-fitting as seen in the previous model training \ref{fig:overfitting-value-loss}. We show two graphs comparing the model with and without technical features (MACD \eqref{eq:MACD:1}, RSI \eqref{eq:RSI:1}, CCI \eqref{eq:CCI:1}, and ADX \eqref{eq:ADX:1}), we also show tables for the model performance with technical features in-sample and out-of-sample below. The model performs better with the additional technical features, but still under-performs the baseline strategies in-sample and out-of-sample.
+
+The PPO model with additional technical indicators shows some promising signs in the below tables. For both out-of-sample and in-sample, the PPO agent has the smallest maximum draw-down of all strategies. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{TEST-4_IS.png}
+    \caption{Here we compare the PPO agent trained with only 4 stocks in the portfolio action space. 'PPO Trained Opt Net Worth' shows the model trained over 500 episodes, where 'PPO Opt Net Worth' shows the model trained over only 10 episodes. As you can see the model does not seem to perform significantly better with additional training. The model performs a bit better in-sample with the introduction of the additional technical features in the observation space as shown in \ref{fig:ppo-4-is-features}.}
+    \label{fig:ppo-4-is}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{TEST-4_IS_features.png}
+    \caption{Here we show the PPO agent trained with only 4 stocks in the portfolio action space with the additional observation space features (MACD \eqref{eq:MACD:1}, RSI \eqref{eq:RSI:1}, CCI \eqref{eq:CCI:1}, and ADX \eqref{eq:ADX:1}). You will see the model perfoms better in-sample here than without the features \ref{fig:ppo-4-is}.}
+    \label{fig:ppo-4-is-features}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Small Portfolio - With Indicators} & \textbf{Final Net Worth - IS} \\
+\hline
+BAH & \$12,603,400.00 \\
+BCRP OPT & \$32,756,904.00 \\
+BNN & \$18,717,160.00 \\
+CRP & \$11,077,651.00 \\
+OLMAR & \$4,384,460.00 \\
+PPO & \$9,844,648.00 \\
+RMR & \$25,026,162.00 \\
+\hline
+\end{tabular}
+\caption{Final net worth for each algorithm during the training period from April 1st, 2009 to December 31st, 2021.}
+\label{tab:results1}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Small Portfolio - With Indicators} & \textbf{Sharpe Ratio - IS} \\
+\hline
+BAH OPT & 0.9999 \\
+BCRP OPT & 1.1321 \\
+BNN & 0.9547 \\
+CRP OPT & 0.9474 \\
+OLMAR & 0.4820 \\
+PPO Opt & 0.9838 \\
+RMR & 1.0418 \\
+\hline
+\end{tabular}
+\caption{Sharpe ratio during the training period from April 1st, 2009 to December 31st, 2021.}
+\label{tab:results2}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Small Portfolio - With Indicators} & \textbf{Max Drawdown - IS} \\
+\hline
+BAH Opt & -0.4112 \\
+BCRP Opt & -0.4380 \\
+BNN Opt & -0.4380 \\
+CRP Opt & -0.4458 \\
+OLMAR Opt & -0.7446 \\
+PPO Opt & -0.4111 \\
+RMR Opt & -0.4380 \\
+\hline
+\end{tabular}
+\caption{Max Drawdown during the training period from April 1st, 2009 to December 31st, 2021.}
+\label{tab:results3}
+\end{minipage}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Small Portfolio - With Indicators} & \textbf{Final Net Worth - OOS 2022} \\
+\hline
+BAH & \$1,548,710.63 \\
+BCRP OPT & \$2,216,338.50 \\
+BNN & \$1,379,313.13 \\
+CRP & \$1,539,008.75 \\
+OLMAR & \$406,781.59 \\
+PPO & \$1,380,535.63 \\
+RMR & \$1,398,116.88 \\
+\hline
+\end{tabular}
+\caption{Final net worth for each algorithm during the test period from February 8th, 2022 to September 30th, 2024.}
+\label{tab:results1}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Small Portfolio - With Indicators} & \textbf{Sharpe Ratio - OOS 2022} \\
+\hline
+BAH OPT & 0.605 \\
+BCRP OPT & 0.837 \\
+BNN & 0.384 \\
+CRP OPT & 0.590 \\
+OLMAR & -0.709 \\
+PPO Opt & 0.469 \\
+RMR & 0.397 \\
+\hline
+\end{tabular}
+\caption{Sharpe ratio during the test period from February 8th, 2022 to September 30th, 2024.}
+\label{tab:results2}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Small Portfolio - With Indicators} & \textbf{Max Drawdown - OOS 2022} \\
+\hline
+BAH Opt & -0.251 \\
+BCRP Opt & -0.315 \\
+BNN Opt & -0.348 \\
+CRP Opt & -0.250 \\
+OLMAR Opt & -0.647 \\
+PPO Opt & -0.227 \\
+RMR Opt & -0.368 \\
+\hline
+\end{tabular}
+\caption{Max Drawdown during the test period from February 8th, 2022 to September 30th, 2024.}
+\label{tab:results3}
+\end{minipage}
+\end{table}

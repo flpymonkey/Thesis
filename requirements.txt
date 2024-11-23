@@ -18,6 +18,7 @@ statsmodels
 
 # plot
 matplotlib
+plotly
 
 # Model Building Requirements
 scikit-learn>=0.21.0

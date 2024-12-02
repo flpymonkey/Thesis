@@ -1,3 +1,200 @@
+
+
+
+
+
+
+
+
+
+
+\section{PPO - AXP, AMGN, AAPL, and BA Stock Portfolio}
+
+Next, we can look at training a similar model but with a different selection of portfolio stocks. We use AXP, AMGN, AAPL, and BA for the stock tickers in this model. All other hyper-parameters are the same as in the previous experiment. This model performs worse than all baselines in the training period in Figure \ref{fig:ppo-4-is}. The model performs about the same as the benchmarks in the test period in Figure \ref{fig:fig:ppo-4-oos}.
+This model suffers from similar sub-optimal policy convergence as the previous PPO model. This further emphasizes the need for improvements to the environment configuration with the PPO agent and highlights the performance of the OL strategies.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{PPO_4_IS.png}
+    \caption{The PPO agent performs below the benchmarks in the training period on a four-stock portfolio.}
+    \label{fig:ppo-4-is}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{PPO_4_all.png}
+    \caption{The model on a four-stock portfolio performs about the same as the other benchmarks out-of-sample.}
+    \label{fig:fig:ppo-4-oos}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Portfolio Size Four} & \textbf{Final Net Worth - OOS} \\
+\hline
+BAH & \$1,290,048.38 \\
+BCRP OPT & \$1,572,443.25 \\
+BNN & \$1,172,875.63 \\
+CRP & \$1,300,454.13 \\
+OLMAR & \$662,705.63 \\
+PPO & \$1,268,475.50 \\
+RMR & \$1,133,744.50 \\
+SCRP & \$1,376,320.38 \\
+\hline
+\end{tabular}
+\caption{PPO trained for four DJI stocks from April 1st, 2009 to December 31st, 2021. This shows the final net worth for each algorithm when testing from February 7th, 2022 to September 27th, 2024.}
+\label{tab:updated-results1}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Portfolio Size Four} & \textbf{Sharpe Ratio - OOS} \\
+\hline
+BAH & 0.485 \\
+BCRP & 0.779 \\
+BNN & 0.293 \\
+CRP & 0.487 \\
+OLMAR & -0.398 \\
+PPO & 0.460 \\
+RMR & 0.235 \\
+SCRP & 0.504 \\
+\hline
+\end{tabular}
+\caption{PPO trained for four DJI stocks from April 1st, 2009 to December 31st, 2021. This shows the Sharpe Ratio for each algorithm when testing from February 7th, 2022 to September 27th, 2024.}
+\label{tab:updated-results2}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Portfolio Size Four} & \textbf{Max Drawdown - OOS} \\
+\hline
+BAH & -0.245 \\
+BCRP & -0.249 \\
+BNN & -0.253 \\
+CRP & -0.250 \\
+OLMAR & -0.444 \\
+PPO & -0.198 \\
+RMR & -0.248 \\
+SCRP & -0.298 \\
+\hline
+\end{tabular}
+\caption{PPO trained for four DJI stocks from April 1st, 2009 to December 31st, 2021. This shows the maximum drawdown for each algorithm when testing from February 7th, 2022 to September 27th, 2024.}
+\label{tab:updated-ppo-drawdown}
+\end{minipage}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Portfolio Size Four} & \textbf{Final Net Worth - IS} \\
+\hline
+BAH & \$15,847,346.0 \\
+BCRP & \$43,922,080.0 \\
+BNN & \$25,096,974.0 \\
+CRP & \$13,071,702.0 \\
+OLMAR & \$5,733,844.5 \\
+PPO & \$5,154,539.0 \\
+RMR & \$33,556,440.0 \\
+SCRP & \$23,277,438.0 \\
+\hline
+\end{tabular}
+\caption{PPO trained for four DJI stocks from April 1st, 2009 to December 31st, 2021. This shows the final net worth for each algorithm during the training period.}
+\label{tab:results1}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Portfolio Size Four} & \textbf{Sharpe Ratio - IS} \\
+\hline
+BAH & 1.011 \\
+BCRP & 1.138 \\
+BNN & 0.973 \\
+CRP & 0.943 \\
+OLMAR & 0.517 \\
+PPO & 0.545 \\
+RMR & 1.053 \\
+SCRP & 0.951 \\
+\hline
+\end{tabular}
+\caption{PPO trained for four DJI stocks from April 1st, 2009 to December 31st, 2021. This shows the Sharpe Ratio during the training period.}
+\label{tab:results2}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}{\linewidth}
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Algorithm - Portfolio Size Four} & \textbf{Max Drawdown - IS} \\
+\hline
+BAH & -0.411 \\
+BCRP & -0.438 \\
+BNN & -0.438 \\
+CRP & -0.446 \\
+OLMAR & -0.745 \\
+PPO & -0.562 \\
+RMR & -0.438 \\
+SCRP & -0.438 \\
+\hline
+\end{tabular}
+\caption{PPO trained for four DJI stocks from April 1st, 2009 to December 31st, 2021. This shows the maximum drawdown during the training period.}
+\label{tab:ppo-drawdown}
+\end{minipage}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \subsection{PPO Agent Results - DJI Portfolio}
 
 For this experiment we are using the Stable Baselines PPO model as discussed previously with the \texttt{PortfolioOptimizationEnv} environment. 

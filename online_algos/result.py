@@ -106,13 +106,12 @@ class AlgoResult(PickleMixin):
         # add risk-free asset
         self.r -= (self.B.sum(axis=1) - 1) * self.rf_rate / self.freq()
 
-        # # TODO ensure that fee calculations are being done correctly here!!!!!!!!!!! add fees
         self.fees = self._to_rebalance().abs() * self.fee
         self.asset_r -= self.fees
         self.r -= self.fees.sum(axis=1)
 
         # in case we use CASH in a portfolio, reflect it in r_ex_cash
-        # TODO: this should be likely reflected in `sharpe` and others
+        # this should be likely reflected in `sharpe` and others
         if "CASH" in self.B.columns and "CASH" in self.X.columns:
             self.r_ex_cash = self.r - (self.X.CASH - 1) * self.B.CASH
         else:
